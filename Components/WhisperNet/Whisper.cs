@@ -3,7 +3,7 @@ using NAudio.Wave;
 using Whisper.net;
 using Whisper.net.Ggml;
 
-namespace VoiceToTextTgBot
+namespace VoiceToTextTgBot.Components.WhisperNet
 {
     internal class Whisper
     {

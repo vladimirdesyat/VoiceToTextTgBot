@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using VoiceToTextTgBot.Components.ConverterLib;
 
-namespace VoiceToTextTgBot
+namespace VoiceToTextTgBot.Components.TgBot
 {
     internal class TelegramBot
     {
@@ -32,9 +33,7 @@ namespace VoiceToTextTgBot
 
                         _ = new Converter();
 
-                        string voiceText = Whisper.Start().Result;
-
-                        await botClient.SendTextMessageAsync(message.Chat, voiceText);
+                        await botClient.SendTextMessageAsync(message.Chat, WhisperNet.Whisper.Start().Result);
 
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.ogg"));
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.wav"));

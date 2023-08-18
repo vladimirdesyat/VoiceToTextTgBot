@@ -2,7 +2,7 @@
 using Concentus.Oggfile;
 using Concentus.Structs;
 
-namespace VoiceToTextTgBot
+namespace VoiceToTextTgBot.Components.ConverterLib
 {
     internal class Converter
     {

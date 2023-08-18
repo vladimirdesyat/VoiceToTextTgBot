@@ -1,7 +1,8 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
+using VoiceToTextTgBot.Components.TgBot;
 
-namespace VoiceToTextTgBot
+namespace VoiceToTextTgBot.Components
 {
     class Program
     {

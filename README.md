@@ -16,5 +16,5 @@ Bot create temporary files (voice.ogg, voice.wav and if you want voice.txt) in B
 
 Bot can download ggml models if it's not in BaseDirectory and save them there. For now ggml models do not temporary files, but maybe will be in future updates.
 
-By default bot using small model, cause i think that it's result same as large-v1 result. 
+By default bot using small model, cause I think that it's result same as large-v1 result. 
 

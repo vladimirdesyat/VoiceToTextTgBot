@@ -1,6 +1,6 @@
 # VoiceToTextTgBot
 
-Telegram bot backend console application that can transcribe in real-time(well it depends on your machine) voice messages to text message with punctuation marks on your language. Just start app and forward your voice message to bot chat. You need bot token to make app work. You can get token from @BotFather, when you create your Telegram bot.
+Telegram bot backend console application that can transcribe in real-time (well it depends on your machine) voice messages to text message with punctuation marks on your language. Just start app and forward your voice message to bot chat. You need bot token to make app work. You can get token from @BotFather, when you create your Telegram bot.
 
 Bot using libraries:
 Telegram.Bot,

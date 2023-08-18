@@ -22,7 +22,7 @@ namespace VoiceToTextTgBot.Components.WhisperNet
             using var whisperFactory = WhisperFactory.FromPath("ggml-small.bin");
 
             using var processor = whisperFactory.CreateBuilder()
-            .WithLanguage("ru")
+            .WithLanguage("auto")
             .WithSpeedUp2x()
             .WithThreads(16)
             .Build();

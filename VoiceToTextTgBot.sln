@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceToTextTgBot", "VoiceToTextTgBot.csproj", "{603DD39F-C9E8-4366-874D-3FD5F6186903}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoiceToTextTgBot", "VoiceToTextTgBot.csproj", "{603DD39F-C9E8-4366-874D-3FD5F6186903}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{772D7605-208C-4C9E-AD73-8B7798A571D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{603DD39F-C9E8-4366-874D-3FD5F6186903} = {772D7605-208C-4C9E-AD73-8B7798A571D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6ED8385D-2BB8-4ADA-B1E5-314B812B77BE}

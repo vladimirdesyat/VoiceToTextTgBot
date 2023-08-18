@@ -13,12 +13,12 @@ namespace VoiceToTextTgBot
             var ggmlType = GgmlType.Small;
             var modelName = "ggml-small.bin";
             var wavName = Path.Combine(AppContext.BaseDirectory, "voice.wav");
-            
+
             if (!File.Exists(modelName))
             {
                 await DownloadModel(modelName, ggmlType);
             }
-            
+
             using var whisperFactory = WhisperFactory.FromPath("ggml-small.bin");
 
             using var processor = whisperFactory.CreateBuilder()
@@ -55,10 +55,10 @@ namespace VoiceToTextTgBot
         }
 
         public static async Task DownloadModel(string modelName, GgmlType ggmlType)
-        {            
+        {
             Console.WriteLine($"Downloading Model {modelName}");
             using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(ggmlType);
-            using var fileWriter = System.IO.File.OpenWrite(modelName);
+            using var fileWriter = File.OpenWrite(modelName);
             await modelStream.CopyToAsync(fileWriter);
         }
     }

@@ -8,11 +8,11 @@ namespace VoiceToTextTgBot
     {
         public ITelegramBotClient botClient = new TelegramBotClient("Token");
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        {   
+        {
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
-                var message = update.Message;  
-                
+                var message = update.Message;
+
                 if (message.Voice != null)
                 {
                     var voiceFileId = await botClient.GetFileAsync(message.Voice.FileId);
@@ -35,15 +35,15 @@ namespace VoiceToTextTgBot
                         string voiceText = Whisper.Start().Result;
 
                         await botClient.SendTextMessageAsync(message.Chat, voiceText);
-                        
+
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.ogg"));
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.wav"));
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.txt"));
 
                         return;
                     }
-                }                    
-            }           
+                }
+            }
         }
 
         public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

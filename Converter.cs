@@ -6,7 +6,7 @@ namespace VoiceToTextTgBot
 {
     internal class Converter
     {
-        public Converter() 
+        public Converter()
         {
             Convert();
         }

@@ -10,8 +10,8 @@ namespace VoiceToTextTgBot.Components.WhisperNet
         public static async Task<string> Start()
         {
             string output = "";
-            var ggmlType = GgmlType.Small;
-            var modelName = "ggml-small.bin";
+            var ggmlType = GgmlType.Tiny;
+            var modelName = "ggml-tiny.bin";
             var wavName = Path.Combine(AppContext.BaseDirectory, "voice.wav");
 
             if (!File.Exists(modelName))
@@ -19,12 +19,12 @@ namespace VoiceToTextTgBot.Components.WhisperNet
                 await DownloadModel(modelName, ggmlType);
             }
 
-            using var whisperFactory = WhisperFactory.FromPath("ggml-small.bin");
+            using var whisperFactory = WhisperFactory.FromPath("ggml-tiny.bin");
 
             using var processor = whisperFactory.CreateBuilder()
             .WithLanguage("auto")
             .WithSpeedUp2x()
-            .WithThreads(16)
+            .WithThreads(4)
             .Build();
 
             using var fileStream = File.OpenRead(wavName);

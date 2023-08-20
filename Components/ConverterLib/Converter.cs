@@ -18,7 +18,7 @@ namespace VoiceToTextTgBot.Components.ConverterLib
             using (var fileIn = new FileStream(Path.Combine(AppContext.BaseDirectory, "voice.ogg"), FileMode.Open))
             using (var pcmStream = new MemoryStream())
             {
-                OpusDecoder decoder = OpusDecoder.Create(48000, 1);
+                OpusDecoder decoder = OpusDecoder.Create(16000, 1);
                 OpusOggReadStream oggIn = new OpusOggReadStream(decoder, fileIn);
                 while (oggIn.HasNextPacket)
                 {
@@ -33,7 +33,7 @@ namespace VoiceToTextTgBot.Components.ConverterLib
                     }
                 }
                 pcmStream.Position = 0;
-                var wavStream = new RawSourceWaveStream(pcmStream, new WaveFormat(48000, 1));
+                var wavStream = new RawSourceWaveStream(pcmStream, new WaveFormat(16000, 1));
                 var sampleProvider = wavStream.ToSampleProvider();
                 WaveFileWriter.CreateWaveFile16(wavFilePath, sampleProvider);
             }

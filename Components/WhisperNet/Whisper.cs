@@ -10,8 +10,8 @@ namespace VoiceToTextTgBot.Components.WhisperNet
         public static async Task<string> Start()
         {
             string output = "";
-            var ggmlType = GgmlType.Small;
-            var modelName = "ggml-small.bin";
+            var ggmlType = GgmlType.LargeV1;
+            var modelName = "ggml-large-v1.bin";
             var wavName = Path.Combine(AppContext.BaseDirectory, "voice.wav");
 
             if (!File.Exists(modelName))
@@ -19,24 +19,17 @@ namespace VoiceToTextTgBot.Components.WhisperNet
                 await DownloadModel(modelName, ggmlType);
             }
 
-            using var whisperFactory = WhisperFactory.FromPath("ggml-small.bin");
+            using var whisperFactory = WhisperFactory.FromPath("ggml-large-v1.bin");
 
             using var processor = whisperFactory.CreateBuilder()
-            .WithLanguage("ru")
+            .WithLanguage("auto")
             .WithSpeedUp2x()
             .WithThreads(16)
             .Build();
 
             using var fileStream = File.OpenRead(wavName);
-            using var wavStream = new MemoryStream();
 
-            using var reader = new WaveFileReader(fileStream);
-            var resampler = new WdlResamplingSampleProvider(reader.ToSampleProvider(), 16000);
-            WaveFileWriter.WriteWavFileToStream(wavStream, resampler.ToWaveProvider16());
-
-            wavStream.Seek(0, SeekOrigin.Begin);
-
-            await foreach (var result in processor.ProcessAsync(wavStream))
+            await foreach (var result in processor.ProcessAsync(fileStream))
             {
                 // Console.WriteLine($"{result.Start}->{result.End}: {result.Text}");
                 output += result.Text + Environment.NewLine;
@@ -52,6 +45,7 @@ namespace VoiceToTextTgBot.Components.WhisperNet
                 return output;
             }
             */
+
             Console.WriteLine("OK");
             return output;
         }

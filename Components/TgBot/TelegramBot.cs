@@ -29,7 +29,6 @@ namespace VoiceToTextTgBot.Components.TgBot
                         Console.WriteLine("Download successful.");
 
                         saveVoiceStream.Close();
-                        saveVoiceStream.Dispose();
 
                         _ = new Converter();
 

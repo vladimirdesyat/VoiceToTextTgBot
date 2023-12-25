@@ -1,23 +1,20 @@
 ﻿using NAudio.Wave;
 using Concentus.Oggfile;
 using Concentus.Structs;
+using NAudio.Wave.Compression;
 
 namespace VoiceToTextTgBot.Components.ConverterLib
 {
-    internal class Converter
+    internal class Converter : IDisposable
     {
-        public Converter()
-        {
-            Convert();
-        }
-
+        private MemoryStream pcmStream;
         public void Convert()
         {
             var wavFilePath = Path.Combine(AppContext.BaseDirectory, "voice.wav");
 
             using (var fileIn = new FileStream(Path.Combine(AppContext.BaseDirectory, "voice.ogg"), FileMode.Open))
-            using (var pcmStream = new MemoryStream())
             {
+                var pcmStream = new MemoryStream();
                 OpusDecoder decoder = OpusDecoder.Create(16000, 1);
                 OpusOggReadStream oggIn = new OpusOggReadStream(decoder, fileIn);
                 while (oggIn.HasNextPacket)
@@ -37,6 +34,11 @@ namespace VoiceToTextTgBot.Components.ConverterLib
                 var sampleProvider = wavStream.ToSampleProvider();
                 WaveFileWriter.CreateWaveFile16(wavFilePath, sampleProvider);
             }
+        }
+
+        public void Dispose()
+        {
+            pcmStream?.Dispose();
         }
     }
 }

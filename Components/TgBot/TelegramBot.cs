@@ -1,15 +1,26 @@
 ﻿using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using VoiceToTextTgBot.Components.ConverterLib;
 
 namespace VoiceToTextTgBot.Components.TgBot
 {
-    internal class TelegramBot
+    internal class TelegramBot : IDisposable
     {
-        public ITelegramBotClient botClient = new TelegramBotClient("Token");
-        public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        string token;
+        public ITelegramBotClient botClient;
+        private Converter converter;
+        private WhisperNet.Whisper whisper;
+        public TelegramBot(string Token)
         {
+            token = Token;
+            botClient = new TelegramBotClient(token);
+            converter = new Converter();
+            whisper = new WhisperNet.Whisper();
+        }
+        public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {            
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 var message = update.Message;
@@ -22,17 +33,22 @@ namespace VoiceToTextTgBot.Components.TgBot
 
                     using (var saveVoiceStream = new FileStream(AppContext.BaseDirectory + "voice.ogg", FileMode.Create))
                     {
-                        await botClient.DownloadFileAsync(voicePath, saveVoiceStream);
+                        try
+                        {
+                            await botClient.DownloadFileAsync(voicePath, saveVoiceStream);
 
-                        Console.WriteLine("Download complete.");
+                            Console.WriteLine("Download complete.");
 
-                        Console.WriteLine("Download successful.");
+                            Console.WriteLine("Download successful.");
+                        }
+                        finally 
+                        {
+                            saveVoiceStream.Close();
 
-                        saveVoiceStream.Close();
+                            converter.Convert();
 
-                        _ = new Converter();
-
-                        await botClient.SendTextMessageAsync(message.Chat, WhisperNet.Whisper.Start().Result);
+                            await botClient.SendTextMessageAsync(message.Chat, whisper.Start().Result);
+                        }                        
 
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.ogg"));
                         System.IO.File.Delete(Path.Combine(AppContext.BaseDirectory, "voice.wav"));
@@ -47,6 +63,13 @@ namespace VoiceToTextTgBot.Components.TgBot
         public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             Console.WriteLine(JsonSerializer.Serialize(exception));
+        }
+
+        public void Dispose()
+        {
+            // Dispose of resources held by the classes
+            converter.Dispose();
+            whisper.Dispose();
         }
     }
 }

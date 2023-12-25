@@ -5,9 +5,14 @@ using Whisper.net.Ggml;
 
 namespace VoiceToTextTgBot.Components.WhisperNet
 {
-    internal class Whisper
+    internal class Whisper : IDisposable
     {
-        public static async Task<string> Start()
+        private readonly WhisperFactory whisperFactory;
+        public Whisper()
+        {
+            whisperFactory = WhisperFactory.FromPath("ggml-large-v1.bin");
+        }
+        public async Task<string> Start()
         {
             string output = "";
             var ggmlType = GgmlType.LargeV1;
@@ -17,9 +22,7 @@ namespace VoiceToTextTgBot.Components.WhisperNet
             if (!File.Exists(modelName))
             {
                 await DownloadModel(modelName, ggmlType);
-            }
-
-            using var whisperFactory = WhisperFactory.FromPath("ggml-large-v1.bin");
+            }            
 
             using var processor = whisperFactory.CreateBuilder()
             .WithLanguage("auto")
@@ -56,6 +59,11 @@ namespace VoiceToTextTgBot.Components.WhisperNet
             using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(ggmlType);
             using var fileWriter = File.OpenWrite(modelName);
             await modelStream.CopyToAsync(fileWriter);
+        }
+
+        public void Dispose()
+        {
+            whisperFactory?.Dispose();
         }
     }
 }
